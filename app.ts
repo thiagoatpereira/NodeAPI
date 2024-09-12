@@ -4,6 +4,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import Customer from './models/customer.model';
+import customerRepository from './repositories/customerRepository';
 
 const app = express();
  
@@ -15,9 +16,13 @@ app.use(helmet());
  
 app.use(express.json());
  
-app.use((req: Request, res: Response, next: NextFunction) => {
-    const customer = new Customer("Thiago", "537.918.938-58")
-    res.send(`Nome: ${customer.name} e CPF: ${customer.cpf}`);
+//tirar o async
+app.use(async (req: Request, res: Response, next: NextFunction) => {
+
+    //const customer = new Customer("Thiago", "537.918.938-58")
+    //res.send(`Nome: ${customer.name} e CPF: ${customer.cpf}`);
+    const result = await customerRepository.getCustomer(2);
+    res.json(`Usuarios ${JSON.stringify(result)}`);
 })
  
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
